@@ -28,7 +28,6 @@ public class PaginaHTML {
 		this.url = url;
 		this.palavraChave = palavraChave;
 		this.conteudo = "";
-		this.palavraChave = "";
 		this.links = new ArrayList<String>();
 		this.acessarPagina();
 		this.percorreHTML();
@@ -99,16 +98,18 @@ public class PaginaHTML {
 			link += conteudo.charAt(posicaoInicial);
 			posicaoInicial++;
 		}
-		if (link.startsWith("http")) {			
-			if(palavraChave.equals("")) {				
+		if (link.startsWith("http")) {
+			if (palavraChave.equals("")) {
 				links.add(link);
 				System.out.println(link);
-			} else if(link.contains(palavraChave)){
-				links.add(link);
-				System.out.println(link);
+			} else {
+				if (link.contains(palavraChave)) {
+					links.add(link);
+					System.out.println(link);
+				}
 			}
 		}
-		
+
 		conteudo = conteudo.replaceFirst(trechoPadrao, "");
 
 		if (conteudo.indexOf(trechoPadrao) > 0) {
