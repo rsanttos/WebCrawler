@@ -99,15 +99,7 @@ public class PaginaHTML {
 			posicaoInicial++;
 		}
 		if (link.startsWith("http")) {
-			if (palavraChave.equals("")) {
-				links.add(link);
-				System.out.println(link);
-			} else {
-				if (link.contains(palavraChave)) {
-					links.add(link);
-					System.out.println(link);
-				}
-			}
+			links.add(link);
 		}
 
 		conteudo = conteudo.replaceFirst(trechoPadrao, "");
