@@ -87,27 +87,40 @@ public class PaginaHTML {
 	public void percorreHTML() {
 
 		String trechoPadrao = "<a href=\"";
-		int posicaoInicial = conteudo.indexOf(trechoPadrao) + trechoPadrao.length();
 
-		int contador = 0;
-		String link = "";
-		while (contador < 1 && posicaoInicial < conteudo.length()) {
-			if (conteudo.charAt(posicaoInicial + 1) == '"') {
-				contador++;
+		if (possuiLinks(conteudo, trechoPadrao)) {
+
+			int posicaoInicial = conteudo.indexOf(trechoPadrao) + trechoPadrao.length();
+
+			int contador = 0;
+			String link = "";
+			while (contador < 1 && posicaoInicial < conteudo.length()) {
+				if (conteudo.charAt(posicaoInicial + 1) == '"') {
+					contador++;
+				}
+				link += conteudo.charAt(posicaoInicial);
+				posicaoInicial++;
 			}
-			link += conteudo.charAt(posicaoInicial);
-			posicaoInicial++;
-		}
-		if (link.startsWith("http")) {
-			links.add(link);
-		}
+			if (link.startsWith("http")) {
+				links.add(link);
+			}
 
-		conteudo = conteudo.replaceFirst(trechoPadrao, "");
+			conteudo = conteudo.replaceFirst(trechoPadrao, "");
 
-		if (conteudo.indexOf(trechoPadrao) > 0) {
-			percorreHTML();
+			if (conteudo.indexOf(trechoPadrao) > 0) {
+				percorreHTML();
+			}
 		}
 
+	}
+
+	public boolean possuiLinks(String conteudo, String trechoPadrao) {
+		int posicao = conteudo.indexOf(trechoPadrao);
+		if (posicao > 0) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

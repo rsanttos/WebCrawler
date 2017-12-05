@@ -62,22 +62,85 @@ public class WebCrawler {
 		this.possuiProfundidade = true;
 	}
 
-	public void executa() {
+	public void inicia() {
 		List<String> linksAux = new ArrayList<String>();
+		List<PaginaHTML> paginas = new ArrayList<PaginaHTML>();
+		linksAux = pagina.getLinks();
+
+		if (!possuiProfundidade && !possuiPalavraChave) {
+			for (String link : linksAux) {
+				if (!linksGeral.contains(link)) {
+					System.out.println(pagina.getUrl() + " - " + link);
+					paginas.add(new PaginaHTML(link));
+					linksGeral.add(link);
+				}
+			}
+
+			for (PaginaHTML p : paginas) {
+				pagina = p;
+				inicia();
+			}
+
+		} else if (!possuiProfundidade && possuiPalavraChave) {
+			for (String link : linksAux) {
+				if (!linksGeral.contains(link) && link.contains(palavraChave)) {
+					System.out.println(pagina.getUrl() + " - " + link);
+					paginas.add(new PaginaHTML(link));
+					linksGeral.add(link);
+				}
+			}
+
+			for (PaginaHTML p : paginas) {
+				pagina = p;
+				inicia();
+			}
+		} else if (possuiProfundidade && !possuiPalavraChave) {
+			for (int i = 0; i < profundidade; i++) {
+				for (String link : linksAux) {
+					if (!linksGeral.contains(link)) {
+						System.out.println(pagina.getUrl() + " - " + link);
+						paginas.add(new PaginaHTML(link));
+						linksGeral.add(link);
+					}
+				}
+			}
+
+			for (PaginaHTML p : paginas) {
+				pagina = p;
+				inicia();
+			}
+		} else if (possuiProfundidade && possuiPalavraChave) {
+			for (int i = 0; i < profundidade; i++) {
+				for (String link : linksAux) {
+					if (!linksGeral.contains(link) && link.contains(palavraChave)) {
+						System.out.println(pagina.getUrl() + " - " + link);
+						paginas.add(new PaginaHTML(link));
+						linksGeral.add(link);
+					}
+				}
+
+				for (PaginaHTML p : paginas) {
+					pagina = p;
+					inicia();
+				}
+			}
+		}
+	}
+
+	public void executa() {
+		List<String> linksAux = this.pagina.getLinks();
 		if (possuiProfundidade) {
 			for (int i = 0; i < profundidade; i++) {
 				processaLinks(pagina, linksAux);
 			}
 		} else {
-			while (pagina.getLinks().size() > 0) {
-				processaLinks(pagina, linksAux);
-			}
+			processaLinks(pagina, linksAux);
 		}
 		pagina.setLinks(linksAux);
 		profundidadeAtual++;
 		executa();
 	}
-	
+
 	public void processaLinks(PaginaHTML pagina, List<String> linksAux) {
 		for (String link : pagina.getLinks()) {
 			if (possuiPalavraChave) {
@@ -112,28 +175,4 @@ public class WebCrawler {
 			}
 		}
 	}
-	// public void executa() {
-	// System.out.println("***************************************************");
-	// System.out.println("-> Acessando página: " + paginaInicial.getUrl());
-	// System.out.println("***************************************************");
-	// List<String> links = paginaInicial.getLinks();
-	//
-	// if (profundidade == -1) {
-	// profundidade = links.size();
-	// }
-	//
-	// if(linksGeral.size() > 0) {
-	// imprimeLinks();
-	// }
-	//
-	// for (int i = 0; i < profundidade; i++) {
-	// if (!linksGeral.contains(links.get(i))) {
-	// linksGeral.add(links.get(i));
-	// paginaInicial = new PaginaHTML(links.get(i), palavraChave);
-	// executa();
-	// } else {
-	// System.out.println("Link visitado.");
-	// }
-	// }
-	// }
 }
